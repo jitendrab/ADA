@@ -1,3 +1,6 @@
+/*
+Written By: Jitendra Keer, CSE, IIT Mandi
+ */
 #include "avl_tree.h"
 
 int height(node *root){
