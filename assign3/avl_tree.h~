@@ -1,0 +1,22 @@
+#ifndef AVL_TREE_H
+#define AVL_TREE_H
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node{
+  int data;
+  int h;
+  struct Node *left, *right;
+  struct Node *parent;
+}node;
+
+//function prototypes
+void insert(node **root, int data, node *parent);
+int balance_factor(node *root);
+int max(int a, int b);
+void is_balanced(node *root);
+void rotate_left(node *z);
+void rotate_right(node *y);
+void print_inorder(node *root);
+int height(node *root);
+#endif

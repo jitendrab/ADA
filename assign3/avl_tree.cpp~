@@ -1,0 +1,145 @@
+#include "avl_tree.h"
+
+int height(node *root){
+  if(root == NULL)
+    return 0;
+  return root->h;
+}
+
+void insert(node **root, int data, node *parent){
+  if((*root) && (*root)->data == data)
+    return;
+  if((*root) == NULL){
+    (*root) = (node *)malloc(sizeof(node ));
+    (*root)->data = data;
+    (*root)->parent = parent;
+    (*root)->h = 1;
+    (*root)->left = NULL;
+    (*root)->right = NULL;
+    return;
+  }
+  if(data > (*root)->data){
+    insert(&(*root)->right, data, (*root));
+  }
+  else{
+    insert(&(*root)->left, data, (*root));
+  }
+  // update the height
+  (*root)->h = max(height((*root)->left), height((*root)->right)) + 1;
+  is_balanced(*root);
+  return;
+}
+
+int balance_factor(node *root){
+  int h = height(root->left) - height(root->right);
+  return h;
+}
+
+void is_balanced(node *root){
+  int bf = balance_factor(root);
+  printf("bf: %d  for %d\n", bf, root->data);
+  // if this node is unbalanced then there are 4 cases
+  if(bf == 2){
+    if(balance_factor(root->left) == -1){
+      //left-right case
+      printf("left-right case..\n");
+      rotate_left(root->left);
+    }
+    // left-left case
+    printf("left-left case...\n");
+    rotate_right(root);
+  }
+  else if(bf == -2){
+    if(balance_factor(root->right) == 1){
+      //the right-left case
+      printf("right-left case...\n");
+      rotate_right(root->right);
+    }
+    // right-right case
+    printf("right-right case...\n");
+    rotate_left(root);
+  }
+  return;
+}
+
+void rotate_left(node *z){
+  node *y = z->right;
+  node *T2 = y->left;
+  node *p = z->parent;
+  
+  //place y in place of z
+  if(p){
+    if(p->left == z){
+      p->left = y;
+    }
+    else if(p->right == z){
+      p->right = y;
+    }
+  }
+  // perform the rotation and update the parent pointers
+  y->left = z;
+  z->right = T2;
+  
+  y->parent = p;
+  z->parent = y;    
+  if(T2)
+    T2->parent = z;      
+  // update the heights
+  z->h = max(height(z->left), height(z->right)) + 1;
+  y->h = max(height(y->left), height(y->right)) + 1;
+  
+}
+
+void rotate_right(node *y){
+  node *x = y->left;
+  node *T3 = x->right;
+  node *p = y->parent;
+  if(p){
+    if(p->left == y)
+      p->left = x;
+    else
+      p->right = x;
+  }
+  // perform the rotations 
+  x->right = y;
+  y->left = T3;
+  //and update parent pointers
+  y->parent = x;
+  if(T3)
+    T3->parent = y;
+  x->parent = p;
+  //update the heights
+  x->h = max(height(x->left), height(x->right)) + 1;
+  y->h = max(height(y->left), height(y->right)) + 1;  
+}
+
+int max(int a, int b){
+  if(a > b)
+    return a;
+  return b;
+}
+void print_inorder(node *root){
+  if(!root)
+    return;
+  print_inorder(root->left);
+  printf("%d ", root->data);
+  print_inorder(root->right);
+  return;
+}
+
+int main(){
+  node *root = NULL;
+  int n = 0;
+  int flag = 1;
+  printf("-999: to quit\nEnter elements: \n");
+  while(flag){
+    scanf("%d", &n);
+    if(n == -999)
+      flag = 0;
+    else
+      insert(&root, n, NULL);
+  }
+  
+  print_inorder(root);
+  return 0;
+}
