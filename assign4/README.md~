@@ -1,0 +1,4 @@
+Analyse the running times of the following sorting algorithms, and verify their theoretical bounds: 
+(a)Insertion sort (b) Merge sort (c) Heap sort (d) Quicksort (e) Counting sort.
+All code implemented in C++.
+
