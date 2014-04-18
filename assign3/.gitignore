@@ -1,4 +1,0 @@
-# ignore generated html files,
-   	*.c~
-	*.cpp~
-	*.md~
